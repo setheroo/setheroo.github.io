@@ -10,6 +10,8 @@ module.exports = function(eleventyConfig) {
         day: "numeric",
       });
     });
+
+    eleventyConfig.addPassthroughCopy("src/assets");
   
     // Blog collection – only real posts
     eleventyConfig.addCollection("blog", function(collectionApi) {
