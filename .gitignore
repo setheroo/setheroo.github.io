@@ -210,7 +210,6 @@ __marimo__/
 # Node
 node_modules/
 npm-debug.log
-package-lock.json
 
 # 11ty / Tailwind build output
 _site/
