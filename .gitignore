@@ -205,3 +205,22 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+# Node
+node_modules/
+npm-debug.log
+package-lock.json
+
+# 11ty / Tailwind build output
+_site/
+.dist/
+.temp/
+.tmp/
+
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.sublime-*

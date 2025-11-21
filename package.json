@@ -1,0 +1,24 @@
+{
+  "name": "setheroo.github.io",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx eleventy && npx tailwindcss -i ./src/css/style.css -o ./_site/css/style.css --minify",
+    "dev": "npx concurrently \"npx tailwindcss -i ./src/css/style.css -o ./_site/css/style.css --watch\" \"npx eleventy --serve\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.2",
+    "autoprefixer": "^10.4.22",
+    "concurrently": "^9.2.1",
+    "eleventy": "^2.0.1",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.17"
+  },
+  "description": "",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.17"
+  }
+}
