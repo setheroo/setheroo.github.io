@@ -3,20 +3,32 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ title }}</title>
+  <title>{% if title %}{{ title }} – {% endif %}setheroo</title>
   <link rel="stylesheet" href="/css/style.css">
   <meta http-equiv="Content-Security-Policy" content="script-src 'self'; style-src 'self' 'unsafe-inline';">
 </head>
 <body class="bg-black text-white min-h-screen font-mono">
-  <header class="fixed top-0 right-0 p-8">
+
+  <header class="fixed top-0 right-0 p-8 z-10">
     <a href="/" class="text-cyan-400 hover:text-cyan-300">← home</a>
   </header>
-  <main class="max-w-4xl mx-auto pt-32 px-8">
-    <h1 class="text-5xl font-bold mb-2">{{ title }}</h1>
-    <time class="text-cyan-400 text-lg">{{ date | dateDisplay }}</time>
-    <article class="prose prose-invert mt-12">
+
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-6xl mx-auto pt-32 px-8">
+    <!-- Sidebar – always visible -->
+    <aside class="md:col-span-1 space-y-4">
+      <h2 class="text-2xl font-bold text-cyan-400 mb-6">posts</h2>
+      {% for post in collections.blog | reverse %}
+        <a href="{{ post.url }}"
+           class="block text-sm hover:text-cyan-300 {{ 'text-cyan-300 font-bold' if page.url == post.url }}">
+          {{ post.data.date | dateDisplay }} — {{ post.data.title }}
+        </a>
+      {% endfor %}
+    </aside>
+
+    <!-- Main content area -->
+    <main class="md:col-span-3 prose prose-invert max-w-none">
       {{ content | safe }}
-    </article>
-  </main>
+    </main>
+  </div>
 </body>
 </html>
