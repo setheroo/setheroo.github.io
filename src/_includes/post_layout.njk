@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self'; style-src 'self' 'unsafe-inline';">
+</head>
+<body class="bg-black text-white min-h-screen font-mono">
+  <header class="fixed top-0 right-0 p-8">
+    <a href="/" class="text-cyan-400 hover:text-cyan-300">← home</a>
+  </header>
+  <main class="max-w-4xl mx-auto pt-32 px-8">
+    <h1 class="text-5xl font-bold mb-2">{{ title }}</h1>
+    <time class="text-cyan-400 text-lg">{{ date | dateDisplay }}</time>
+    <article class="prose prose-invert mt-12">
+      {{ content | safe }}
+    </article>
+  </main>
+</body>
+</html>
