@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>For The Joy of Code – setheroo</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self'; style-src 'self' 'unsafe-inline';">
+</head>
+<body class="bg-black text-white min-h-screen font-mono">
+
+  <header class="fixed top-0 right-0 p-8 z-10">
+    <a href="/" class="text-cyan-400 hover:text-cyan-300">← home</a>
+  </header>
+
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-6xl mx-auto pt-32 px-8">
+    <!-- Sidebar – always visible -->
+    <aside class="md:col-span-1 space-y-4">
+      <h2 class="text-2xl font-bold text-cyan-400 mb-6">posts</h2>
+      
+        <a href="/blog/welcome/"
+           class="block text-sm hover:text-cyan-300 ">
+          Jan 1, 1900 — Welcome to the chaos, enjoy the stay, eat a cookie
+        </a>
+      
+        <a href="/blog/to_own_a_ranger/"
+           class="block text-sm hover:text-cyan-300 ">
+          Nov 17, 2025 — An Almost Therapeutic Thing
+        </a>
+      
+        <a href="/blog/the_garden/"
+           class="block text-sm hover:text-cyan-300 ">
+          Nov 21, 2025 — Yes, It Eats Bugs
+        </a>
+      
+        <a href="/blog/more_pc_plz/"
+           class="block text-sm hover:text-cyan-300 ">
+          Nov 21, 2025 — You Always Need Another Spot to PC
+        </a>
+      
+        <a href="/blog/more_fire/"
+           class="block text-sm hover:text-cyan-300 ">
+          Nov 21, 2025 — Warmth is Good
+        </a>
+      
+        <a href="/blog/melons/"
+           class="block text-sm hover:text-cyan-300 ">
+          Nov 21, 2025 — Who Doesn&#39;t Love Melons?
+        </a>
+      
+        <a href="/blog/if_only/"
+           class="block text-sm hover:text-cyan-300 ">
+          Nov 21, 2025 — Do You Know Jollibee?
+        </a>
+      
+        <a href="/blog/homeowner/"
+           class="block text-sm hover:text-cyan-300 ">
+          Nov 21, 2025 — No Place Like Home
+        </a>
+      
+        <a href="/blog/hectic/"
+           class="block text-sm hover:text-cyan-300 ">
+          Nov 21, 2025 — Crazy World We Live In Now
+        </a>
+      
+        <a href="/blog/crazy_idea/"
+           class="block text-sm hover:text-cyan-300 ">
+          Nov 21, 2025 — Make It Make Sense
+        </a>
+      
+        <a href="/blog/code_time/"
+           class="block text-sm hover:text-cyan-300 text-cyan-300 font-bold">
+          Nov 21, 2025 — For The Joy of Code
+        </a>
+      
+        <a href="/blog/cars/"
+           class="block text-sm hover:text-cyan-300 ">
+          Nov 21, 2025 — Cars, Just Drive
+        </a>
+      
+        <a href="/blog/at_the_range/"
+           class="block text-sm hover:text-cyan-300 ">
+          Nov 21, 2025 — Erhm, Did You Just Shoot? I Couldn&#39;t Hear..
+        </a>
+      
+        <a href="/blog/ai_art/"
+           class="block text-sm hover:text-cyan-300 ">
+          Nov 21, 2025 — Expression is... Simple
+        </a>
+      
+        <a href="/blog/achievements/"
+           class="block text-sm hover:text-cyan-300 ">
+          Nov 21, 2025 — I Do Certs
+        </a>
+      
+    </aside>
+
+    <!-- Main content area -->
+    <main class="md:col-span-3 prose prose-invert max-w-none">
+      
+<h1 class="text-5xl font-bold mb-8">Beware of Slithering Creatures - They Hiss</h1>
+<p class="text-xl">The Goal Behind These Snippets</p>
+<span class="mr-2 text-blue-500">•••••••••••</span>
+<p class="text-xl">Watering</p>
+<span class="mr-2 text-blue-500">•••••••••••</span>
+<p class="text-xl">I wound up getting a Tuya Watering Valve</p>
+<p class="text-xl">Scripted getting the status out of it and issuing commands. Requires the Tiny Tuya Library, and applies to <a href="https://www.amazon.com/dp/B0DGPRFJ3C?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1" style="color: blue; text-decoration: underline;">Frankever DN20 Valve</a></p>
+<p class="text-xl">This script will print the status like this, or if TRIGGER_VALVE is True, make it spray water for a moment:</p>
+<br>
+<img src="/assets/img/status_valve.png" alt="Melon" class="rounded-lg">
+<br>
+<div class="code-window bg-gray-800 text-white rounded-lg overflow-hidden mb-8">
+  <div class="window-header bg-gray-700 px-4 py-2 flex items-center">
+    <span class="dot bg-red-500 rounded-full w-3 h-3 mr-2"></span>
+    <span class="dot bg-yellow-500 rounded-full w-3 h-3 mr-2"></span>
+    <span class="dot bg-green-500 rounded-full w-3 h-3"></span>
+    <span class="ml-4 text-sm text-gray-300">status.py</span>
+  </div>
+  <pre class="p-4 text-sm overflow-x-auto"><code class="language-python">
+# filepath: status.py
+import tinytuya
+import time
+from config import status_map
+
+TRIGGER_VALVE = False
+
+def show_status(data):
+    print("\n" + "="*55)
+    print("       SMART IRRIGATION CONTROLLER STATUS")
+    print("="*55)
+
+    dps = data.get('dps', {})
+
+    for dp_id, raw_value in sorted(dps.items(), key=lambda x: int(x[0])):
+        if dp_id not in status_map:
+            print(f"  DPS {dp_id:>3}: {raw_value}  (unknown)")
+            continue
+
+        info = status_map[dp_id]
+        code = info["code"]
+        dtype = info["type"]
+        vals = info["values"]
+
+        # ----------  format the value ----------
+        if dtype == "Boolean":
+            formatted = "ON" if raw_value else "OFF"
+
+        elif dtype == "Enum" and "range" in vals:
+            range_list = vals["range"]
+            # accept either an index (int) or the literal string
+            if isinstance(raw_value, int) and 0 <= raw_value < len(range_list):
+                formatted = range_list[raw_value]
+            elif isinstance(raw_value, str) and raw_value in range_list:
+                formatted = raw_value
+            else:
+                formatted = str(raw_value)
+
+        elif "unit" in vals:
+            unit = vals["unit"]
+            if "scale" in vals and vals["scale"] > 0:
+                formatted = f"{raw_value / (10 ** vals['scale']):.{vals['scale']}f}{unit}"
+            else:
+                formatted = f"{raw_value}{unit}"
+        else:
+            formatted = str(raw_value)
+
+        print(f"  {code:25} | DPS {dp_id:>3} | {formatted}")
+
+    print("="*55)
+
+
+# Connect to Device
+d = tinytuya.Device(
+    dev_id='HAHAHAHA',
+    address='YARITE',
+    local_key='YOUWISH',
+    version=3.5,
+    persist=True)
+d.set_version(3.5)
+
+show_status(d.status())
+
+
+if TRIGGER_VALVE:
+    print("\nTriggering valve ON for 4ish seconds...")
+    result = d.set_multiple_values({
+        1: True,     # Turn ON
+        2: 10,       # 10% open
+    }, nowait=False)
+    print("Set result:", result)
+    time.sleep(1)
+    print("\nChecking status after 1 second...")
+    show_status(d.status())
+    time.sleep(3)
+    
+    # 4. Final check
+    print("\nFinal status check")
+    final = d.status()
+    show_status(final)
+
+    dps = final.get('dps', {})
+    still_on = dps.get('1') is True
+
+    if still_on:
+        print("Shutting down valve manually...")
+        final_result = d.set_multiple_values({1: False}, nowait=False)
+        print("Set result:", final_result)
+        print("\nStatus after forced shutoff, waiting 3 seconds to poll:")
+        time.sleep(3)
+        show_status(d.status())
+    else:
+        print("Valve shut off automatically - all good.")
+  </code></pre>
+</div>
+
+<div class="code-window bg-gray-800 text-white rounded-lg overflow-hidden mb-8">
+  <div class="window-header bg-gray-700 px-4 py-2 flex items-center">
+    <span class="dot bg-red-500 rounded-full w-3 h-3 mr-2"></span>
+    <span class="dot bg-yellow-500 rounded-full w-3 h-3 mr-2"></span>
+    <span class="dot bg-green-500 rounded-full w-3 h-3"></span>
+    <span class="ml-4 text-sm text-gray-300">config.py</span>
+  </div>
+  <pre class="p-4 text-sm overflow-x-auto"><code class="language-python">
+status_map = {
+    "1": {
+        "code": "switch",
+        "type": "Boolean",
+        "values": {}
+    },
+    "2": {
+        "code": "percent_control",
+        "type": "Integer",
+        "values": {
+            "unit": "%",
+            "min": 0,
+            "max": 100,
+            "scale": 0,
+            "step": 10
+        }
+    },
+    "3": {
+        "code": "percent_state",
+        "type": "Integer",
+        "values": {
+            "unit": "%",
+            "min": 0,
+            "max": 100,
+            "scale": 0,
+            "step": 1
+        }
+    },
+    "5": {
+        "code": "water_once",
+        "type": "Integer",
+        "values": {
+            "unit": "L",
+            "min": 0,
+            "max": 10000,
+            "scale": 1,
+            "step": 1
+        }
+    },
+    "6": {
+        "code": "water_total",
+        "type": "Integer",
+        "values": {
+            "unit": "L",
+            "min": 0,
+            "max": 999999999,
+            "scale": 0,
+            "step": 1
+        }
+    },
+    "10": {
+        "code": "weather_delay",
+        "type": "Enum",
+        "values": {
+            "range": [
+                "cancel",
+                "24h",
+                "48h",
+                "72h"
+            ]
+        }
+    },
+    "11": {
+        "code": "countdown",
+        "type": "Integer",
+        "values": {
+            "unit": "s",
+            "min": 0,
+            "max": 86400,
+            "scale": 0,
+            "step": 1
+        }
+    },
+    "22": {
+        "code": "sensor_temperature",
+        "type": "Integer",
+        "values": {
+            "unit": "°C",
+            "min": 0,
+            "max": 100,
+            "scale": 0,
+            "step": 1
+        }
+    },
+    # Additional common DPS codes often seen in smart irrigation devices
+    "102": {
+        "code": "auto_mode",
+        "type": "Boolean",
+        "values": {}
+    },
+    "103": {
+        "code": "manual_watering_time",
+        "type": "Integer",
+        "values": {
+            "unit": "s",
+            "min": 0,
+            "max": 3600,
+            "scale": 0,
+            "step": 1
+        }
+    },
+    "104": {
+        "code": "child_lock",
+        "type": "Boolean",
+        "values": {}
+    },
+    "105": {
+        "code": "cycle_watering",
+        "type": "Integer",
+        "values": {
+            "unit": "times",
+            "min": 0,
+            "max": 10,
+            "scale": 0,
+            "step": 1
+        }
+    },
+    "106": {
+        "code": "cycle_interval",
+        "type": "Integer",
+        "values": {
+            "unit": "min",
+            "min": 0,
+            "max": 1440,
+            "scale": 0,
+            "step": 1
+        }
+    },
+    "107": {
+        "code": "cycle_duration",
+        "type": "Integer",
+        "values": {
+            "unit": "s",
+            "min": 0,
+            "max": 3600,
+            "scale": 0,
+            "step": 1
+        }
+    },
+    "108": {
+        "code": "frost_protection",
+        "type": "Boolean",
+        "values": {}
+    },
+    "109": {
+        "code": "remaining_watering_time",
+        "type": "Integer",
+        "values": {
+            "unit": "s",
+            "min": 0,
+            "max": 86400,
+            "scale": 0,
+            "step": 1
+        }
+    },
+    "110": {
+        "code": "mode",
+        "type": "Enum",
+        "values": {
+            "range": ["off", "manual", "auto", "delay"]
+        }
+    },
+    "112": {
+        "code": "pump_status",
+        "type": "Boolean",
+        "values": {}
+    },
+    "113": {
+        "code": "fault_code",
+        "type": "Integer",
+        "values": {
+            "min": 0,
+            "max": 255,
+            "scale": 0,
+            "step": 1
+        }
+    }
+}
+  </code></pre>
+</div>
+
+<p class="text-xl">Sharing is caring</p>
+<p class="text-xl">My next logical steps, are going to be having this triggered either Node Red, or ole fashioned cron - I am still pondering.</p>
+
+<link rel="stylesheet" href="/assets/css/prism.css">
+<script src="/assets/js/prism.js"></script>
+    </main>
+  </div>
+</body>
+</html>
