@@ -1,5 +1,4 @@
 module.exports = function(eleventyConfig) {
-    // Safe date filter
     eleventyConfig.addFilter("dateDisplay", (dateObj) => {
       if (!dateObj) return "no date";
       const date = new Date(dateObj);
@@ -12,12 +11,11 @@ module.exports = function(eleventyConfig) {
     });
 
     eleventyConfig.addPassthroughCopy("src/assets");
-  
-    // Blog collection – only real posts
+    
     eleventyConfig.addCollection("blog", function(collectionApi) {
       return collectionApi.getFilteredByGlob("src/blog/*.njk")
-        .filter(p => p.data.permalink !== "/blog/")  // exclude index
-        .filter(p => p.data.date)                    // ← THIS LINE fixes the blank page
+        .filter(p => p.data.permalink !== "/blog/")
+        .filter(p => p.data.date)
         .sort((a, b) => new Date(b.date) - new Date(a.date));
     });
   
